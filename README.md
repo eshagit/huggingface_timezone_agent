@@ -1,4 +1,4 @@
-# AI Agent huggingface timezone agent to get time based on user specified timezone
+# AI Agent interface (huggingface) timezone agent to get time based on user specified timezone
 smolagent framework to get different timezone based on user query
 
 ## Demo: 
