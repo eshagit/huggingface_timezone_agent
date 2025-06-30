@@ -1,9 +1,10 @@
-from smolagents import CodeAgent,DuckDuckGoSearchTool, HfApiModel,load_tool,tool
+from smolagents import CodeAgent,DuckDuckGoSearchTool, ApiModel,load_tool,tool
 import datetime
 import requests
 import pytz
 import yaml
 from tools.final_answer import FinalAnswerTool
+from tools.progressive_prefix_finder import ProgressivePrefixFinderTool
 
 from Gradio_UI import GradioUI
 
@@ -35,11 +36,12 @@ def get_current_time_in_timezone(timezone: str) -> str:
 
 
 final_answer = FinalAnswerTool()
+progressive_prefix_finder = ProgressivePrefixFinderTool()
 
 # If the agent does not answer, the model is overloaded, please use another model or the following Hugging Face Endpoint that also contains qwen2.5 coder:
 model_id='https://pflgm2locj2t89co.us-east-1.aws.endpoints.huggingface.cloud' 
 
-model = HfApiModel(
+model = ApiModel(
 max_tokens=2096,
 temperature=0.5,
 #model_id='Qwen/Qwen2.5-Coder-32B-Instruct',# it is possible that this model may be overloaded
@@ -56,7 +58,7 @@ with open("prompts.yaml", 'r') as stream:
     
 agent = CodeAgent(
     model=model,
-    tools=[final_answer,image_generation_tool,my_custom_tool,get_current_time_in_timezone], ## add your tools here (don't remove final answer)
+    tools=[final_answer,image_generation_tool,my_custom_tool,get_current_time_in_timezone,progressive_prefix_finder], ## add your tools here (don't remove final answer)
     max_steps=6,
     verbosity_level=1,
     grammar=None,
